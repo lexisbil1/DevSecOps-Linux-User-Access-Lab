@@ -46,18 +46,26 @@ The goals included:
 ### Commands Executed
 
 sudo useradd -m audit_test
+
 getent passwd audit_test
+
 id audit_test
+
 Explanation
 
 audit_test was created using useradd -m, which does not assign a password by default.
 getent and id confirmed the account exists with a home directory, but has no usable password yet.
 
 Part B – Identify Passwordless Users & Investigate /etc/shadow
+
 Commands Executed
+
 sudo ls -l /etc/passwd /etc/shadow
+
 sudo grep '^audit_test:' /etc/shadow
+
 sudo awk -F: '($2=="" || $2=="!" || $2=="!!") {print $1, $2}' /etc/shadow
+
 Explanation
 
 /etc/passwd stores user account metadata
@@ -67,9 +75,13 @@ Explanation
 audit_test showed a ! in the password field → no password set
 
 Part C – Remediate by Setting a Password
+
 Commands Executed
+
 sudo passwd audit_test
+
 sudo grep '^audit_test:' /etc/shadow
+
 Explanation
 
 After setting the password, the shadow entry changed from ! to a full hashed password.
@@ -78,23 +90,34 @@ This confirms remediation and proper password configuration.
 # Scenario 2 – DevSecOps Access Control Configuration
 
 Part 1 – Create Department Groups
+
 Commands Executed
+
 sudo groupadd dev_team
+
 sudo groupadd sec_team
+
 sudo groupadd qa_team
+
 sudo groupadd ops_team
 
 getent group dev_team
+
 getent group sec_team
+
 getent group qa_team
+
 getent group ops_team
+
 Explanation
 
 Four department groups were created to implement clear RBAC separation.
 Group existence was verified via getent.
 
 Part 2 – Create All Onboarded Users
+
 Commands Executed
+
 sudo useradd -m lateef
 
 sudo adduser yaa
